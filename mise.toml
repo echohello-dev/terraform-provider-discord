@@ -1,0 +1,108 @@
+[tools]
+# Single source of truth for Go version.
+# Update this and run `mise install && mise run tidy` to bump.
+go = "1.25"
+terraform = "1.9"
+	golangci-lint = "latest"
+gotestsum = "1.12"
+# Go-based tools installed via go install (does NOT pollute go.mod)
+"go:github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs" = "0.19"
+
+[env]
+# Prevent Go from auto-downloading a different toolchain
+# and silently rewriting go.mod behind our backs.
+GOTOOLCHAIN = "local"
+
+[vars]
+provider_address = "registry.terraform.io/echohello-dev/discord"
+provider_name = "discord"
+helper_tests_arg = 'specify tests as an argument: mise run <task> "TestAccResource_server"'
+
+[tasks.default]
+description = "List available tasks"
+alias = "h"
+run = [
+  "mise tasks",
+  "printf '\nRun `mise task info <task>` for more information on each task.'"
+]
+quiet = true
+
+[tasks.build]
+description = "Build the provider binary"
+alias = "b"
+run = [
+  "mkdir -p .build/",
+  "go build -o .build/terraform-provider-discord",
+]
+sources = ["internal/**/*.go", "main.go", "go.mod", "go.sum", "mise.toml"]
+outputs = [".build/terraform-provider-discord"]
+
+[tasks.install]
+description = "Install the provider to GOBIN"
+alias = "i"
+run = "go install ."
+
+[tasks.clean]
+description = "Clean up built artifacts"
+alias = "c"
+run = "rm -vrf .build/"
+
+[tasks.dev-clean]
+description = "Clean up dev artifacts"
+run = "rm -vrf dev/"
+
+[tasks.fmt]
+description = "Format Go and Terraform code"
+alias = "f"
+run = [
+  "go fmt ./...",
+  "terraform fmt -recursive examples/",
+]
+
+[tasks.vet]
+description = "Run go vet"
+run = "go vet ./..."
+
+[tasks.lint]
+description = "Run static code analysis"
+alias = "l"
+run = "golangci-lint run ./..."
+
+[tasks.test]
+description = "Run unit tests ({{vars.helper_tests_arg}})"
+alias = "t"
+run = 'gotestsum --max-fails=50 ./... -run {{arg(name="tests", default="")}}'
+
+[tasks.testacc]
+description = "Run acceptance tests against real infrastructure ({{vars.helper_tests_arg}})"
+alias = "ta"
+run = 'TF_ACC=1 mise run test'
+
+[tasks.docs]
+description = "Generate provider documentation"
+alias = "d"
+run = [
+  "rm -rf docs/",
+  "mkdir docs/",
+  "tfplugindocs generate --provider-name discord",
+]
+
+[tasks.dev-setup]
+description = "Set up development overrides in ~/.terraformrc"
+alias = "ds"
+run = [
+  "echo 'provider_installation {' > ~/.terraformrc",
+  "echo '  dev_overrides {' >> ~/.terraformrc",
+  "echo '    \"registry.terraform.io/echohello-dev/discord\" = \"\"' >> ~/.terraformrc",
+  "echo '  }' >> ~/.terraformrc",
+  "echo '  direct {}' >> ~/.terraformrc",
+  "echo '}' >> ~/.terraformrc",
+  "echo 'Created ~/.terraformrc with dev_overrides. Replace the empty path with your GOBIN directory (run: go env GOBIN).'",
+]
+
+[tasks.tidy]
+description = "Tidy Go modules"
+run = "go mod tidy"
+
+[settings]
+experimental = true

@@ -1,0 +1,9 @@
+/.build/
+/dev/
+/docs/
+.terraform*
+*.tfstate*
+*.log
+*.out
+vendor/
+dist/
