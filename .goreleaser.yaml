@@ -1,0 +1,63 @@
+version: 2
+
+project_name: terraform-provider-discord
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: terraform-provider-discord
+    binary: terraform-provider-discord_v{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .ShortCommit }} -X main.date={{ .Date }}
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      # windows/arm64 is not supported by the Terraform Registry plugin protocol
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - id: terraform-provider-discord
+    # Terraform Registry expects archive names in the form:
+    #   terraform-provider-discord_<version>_<os>_<arch>.zip
+    name_template: terraform-provider-discord_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    formats: [zip]
+    files:
+      # No extra files inside the archive - Registry only wants the binary
+      - none*
+
+checksum:
+  name_template: terraform-provider-discord_{{ .Version }}_SHA256SUMS
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-dev"
+
+signs:
+  - id: terraform-provider-discord
+    signature: "${artifact}.sig"
+    cmd: gpg
+    args:
+      - --batch
+      - --local-user
+      - 2B11E3055D7BAED4
+      - --output
+      - ${signature}
+      - --detach-sign
+      - ${artifact}
+    artifacts: checksum
+
+release:
+  draft: false
+  prerelease: auto
+  # release-please already creates the GitHub Release when it tags.
+  # goreleaser attaches the binaries + signed checksums to that existing release.

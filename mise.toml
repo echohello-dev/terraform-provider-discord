@@ -3,10 +3,11 @@
 # Update this and run `mise install && mise run tidy` to bump.
 go = "1.25"
 terraform = "1.9"
-	golangci-lint = "latest"
+golangci-lint = "latest"
 gotestsum = "1.12"
+goreleaser = "latest"
 # Go-based tools installed via go install (does NOT pollute go.mod)
-"go:github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs" = "0.19"
+"go:github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs" = "latest"
 
 [env]
 # Prevent Go from auto-downloading a different toolchain
@@ -38,9 +39,17 @@ sources = ["internal/**/*.go", "main.go", "go.mod", "go.sum", "mise.toml"]
 outputs = [".build/terraform-provider-discord"]
 
 [tasks.install]
-description = "Install the provider to GOBIN"
-alias = "i"
-run = "go install ."
+description = "Install provider to terraform plugins dir"
+run = [
+  "mise run build",
+  "mkdir -p ~/.terraform.d/plugins/registry.terraform.io/echohello-dev/discord/0.0.1/$(go env GOOS)_$(go env GOARCH)",
+  "cp .build/terraform-provider-discord ~/.terraform.d/plugins/registry.terraform.io/echohello-dev/discord/0.0.1/$(go env GOOS)_$(go env GOARCH)/",
+]
+run_windows = [
+  "mise run build",
+  "if not exist \"%USERPROFILE%\\.terraform.d\\plugins\\registry.terraform.io\\echohello-dev\\discord\\0.0.1\\windows_amd64\" mkdir \"%USERPROFILE%\\.terraform.d\\plugins\\registry.terraform.io\\echohello-dev\\discord\\0.0.1\\windows_amd64\"",
+  "copy .build\\terraform-provider-discord \"%USERPROFILE%\\.terraform.d\\plugins\\registry.terraform.io\\echohello-dev\\discord\\0.0.1\\windows_amd64\\",
+]
 
 [tasks.clean]
 description = "Clean up built artifacts"
@@ -82,6 +91,14 @@ run = 'TF_ACC=1 mise run test'
 description = "Generate Terraform documentation"
 alias = "d"
 run = ["tfplugindocs generate --rendered-provider-name Discord --provider-name discord"]
+
+[tasks.validate]
+description = "Validate the provider"
+depends = ["lint", "test"]
+
+[tasks.release]
+description = "Run goreleaser release"
+run = ["goreleaser release --clean"]
 
 [tasks.dev-setup]
 description = "Set up development overrides in ~/.terraformrc"
