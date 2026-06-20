@@ -78,14 +78,10 @@ description = "Run acceptance tests against real infrastructure ({{vars.helper_t
 alias = "ta"
 run = 'TF_ACC=1 mise run test'
 
-[tasks.docs]
-description = "Generate provider documentation"
+[tasks.doc]
+description = "Generate Terraform documentation"
 alias = "d"
-run = [
-  "rm -rf docs/",
-  "mkdir docs/",
-  "tfplugindocs generate --provider-name discord",
-]
+run = ["tfplugindocs generate --rendered-provider-name Discord --provider-name discord"]
 
 [tasks.dev-setup]
 description = "Set up development overrides in ~/.terraformrc"

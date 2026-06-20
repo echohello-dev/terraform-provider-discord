@@ -7,12 +7,15 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+      - name: Set up mise
+        uses: jdx/mise-action@v2
         with:
           install: true
 
@@ -22,8 +25,35 @@ jobs:
       - name: Vet
         run: mise run vet
 
+      - name: Test
+        run: mise run test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
       - name: Lint
         run: mise run lint
 
-      - name: Test
-        run: mise run test
+  docs:
+    name: Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up mise
+        uses: jdx/mise-action@v2
+        with:
+          install: true
+
+      - name: Check docs are up to date
+        run: .github/scripts/check-docs.sh
