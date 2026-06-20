@@ -36,7 +36,9 @@ examples/
   resources/<name>/resource.tf       # Registry per-resource examples
   data-sources/<name>/data-source.tf # Registry per-data-source examples
 docs/                                # committed tfplugindocs output (registry-ingestable)
-  guides/                            # hand-written guides (NOT regenerated)
+  guides/                            # copied from templates/guides/ by tfplugindocs
+templates/                           # tfplugindocs template source
+  guides/                            # hand-written guides, copied to docs/guides/ as-is
 mise.toml                            # tool versions + tasks
 .goreleaser.yaml                     # build matrix, archives, checksums, GPG signing
 ```
@@ -98,9 +100,9 @@ mise run release      # goreleaser release --clean (CI only)
 
 ## Docs
 
-- `mise run doc` regenerates everything in `docs/` **except** `docs/guides/` (hand-written)
+- `mise run doc` regenerates everything in `docs/` from templates and the provider schema
 - New resources/data sources automatically pick up `examples/resources/<name>/resource.tf` content
-- Hand-written guides in `docs/guides/` are preserved; tfplugindocs will NOT delete them (only deletes directories it owns)
+- Hand-written guides live in `templates/guides/` and are copied to `docs/guides/` by tfplugindocs (not deleted)
 - CI runs `.github/scripts/check-docs.sh` to fail builds when docs drift
 
 ## Release Process
