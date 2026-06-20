@@ -1,6 +1,6 @@
 // Run "go generate" to format example terraform files and generate the docs.
 //go:generate terraform fmt -recursive ./examples/
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name discord
+//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --rendered-provider-name Discord --provider-name discord
 
 package main
 
