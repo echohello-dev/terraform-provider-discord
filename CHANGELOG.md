@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/echohello-dev/terraform-provider-discord/compare/v1.0.0...v1.0.1) (2026-06-21)
+
+
+### Miscellaneous
+
+* **release:** restore manifest to v1.0.0 ([e8734d2](https://github.com/echohello-dev/terraform-provider-discord/commit/e8734d265de89080e6031890210d09fc05450fb7))
+
 ## 1.0.0 (2026-06-21)
 
 
