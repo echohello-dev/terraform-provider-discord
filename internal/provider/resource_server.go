@@ -248,7 +248,7 @@ func (r *serverResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	guild, err := r.client.Guild(state.ID.ValueString(), discordgo.WithRetryOnRatelimit(true))
 	if err != nil {
-		if err.Error() == "HTTP 404 Not Found" {
+		if isNotFound(err) {
 			resp.State.RemoveResource(ctx)
 			return
 		}

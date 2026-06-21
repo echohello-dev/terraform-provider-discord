@@ -164,7 +164,7 @@ func (r *inviteResource) Read(ctx context.Context, req resource.ReadRequest, res
 
 	invite, err := r.client.Invite(state.Code.ValueString())
 	if err != nil {
-		if err.Error() == "HTTP 404 Not Found" {
+		if isNotFound(err) {
 			resp.State.RemoveResource(ctx)
 			return
 		}

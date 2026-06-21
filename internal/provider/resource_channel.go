@@ -200,7 +200,7 @@ func (r *channelResource) Read(ctx context.Context, req resource.ReadRequest, re
 
 	channel, err := r.client.Channel(state.ID.ValueString())
 	if err != nil {
-		if err.Error() == "HTTP 404 Not Found" {
+		if isNotFound(err) {
 			resp.State.RemoveResource(ctx)
 			return
 		}

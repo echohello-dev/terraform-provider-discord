@@ -1,9 +1,13 @@
 package provider
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 func parsePermissions(s string) (int64, error) {
@@ -35,4 +39,19 @@ func stringPtr(s string) *string {
 
 func nowRFC3339() string {
 	return time.Now().UTC().Format(time.RFC3339)
+}
+
+// isNotFound returns true if err is a discordgo REST 404 response.
+// discordgo returns a *discordgo.RESTError for non-2xx responses; we
+// inspect the HTTP status code rather than matching on the error string
+// (which is fragile and breaks if discordgo changes its format).
+func isNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	var restErr *discordgo.RESTError
+	if errors.As(err, &restErr) && restErr.Response != nil {
+		return restErr.Response.StatusCode == http.StatusNotFound
+	}
+	return false
 }

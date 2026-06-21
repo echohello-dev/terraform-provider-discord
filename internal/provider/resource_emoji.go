@@ -128,7 +128,7 @@ func (r *emojiResource) Read(ctx context.Context, req resource.ReadRequest, resp
 
 	emoji, err := r.client.GuildEmoji(state.ServerID.ValueString(), state.ID.ValueString())
 	if err != nil {
-		if err.Error() == "HTTP 404 Not Found" {
+		if isNotFound(err) {
 			resp.State.RemoveResource(ctx)
 			return
 		}
