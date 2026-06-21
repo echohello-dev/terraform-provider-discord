@@ -7,10 +7,9 @@ if [ -z "${GPG_PRIVATE_KEY:-}" ]; then
   exit 1
 fi
 
-if [ -z "${GPG_PASSPHRASE:-}" ]; then
-  echo "::error::GPG_PASSPHRASE is not set"
-  exit 1
-fi
+# GPG_PASSPHRASE may be unset or empty if the key has no passphrase.
+# Default to empty string so gpg --passphrase works either way.
+GPG_PASSPHRASE="${GPG_PASSPHRASE:-}"
 
 # Import the key
 echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --pinentry-mode loopback \
