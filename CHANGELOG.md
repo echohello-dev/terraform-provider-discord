@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1](https://github.com/echohello-dev/terraform-provider-discord/compare/v1.0.0...v1.0.1) (2026-06-21)
+
+
+### Bug Fixes
+
+* use discordgo.RESTError status check instead of fragile string match ([031d3b4](https://github.com/echohello-dev/terraform-provider-discord/commit/031d3b4d043cc210ffa9e9cf78b78626666ced3d))
+
+
+### Miscellaneous
+
+* **release:** restore manifest to v1.0.0 ([e8734d2](https://github.com/echohello-dev/terraform-provider-discord/commit/e8734d265de89080e6031890210d09fc05450fb7))
+
 ## 1.0.0 (2026-06-21)
 
 
