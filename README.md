@@ -11,9 +11,14 @@ A Terraform provider for managing Discord resources such as servers (guilds), ch
   - `discord_emoji` - Manage custom emojis in a server
   - `discord_webhook` - Manage webhooks for channels
   - `discord_invite` - Manage channel invites
+  - `discord_channel_permission_overwrite` - Set per-channel permission overwrites for roles/members
+  - `discord_member_role` - Assign a role to a guild member
+  - `discord_message` - Send a message to a channel (create-only)
 
 - **Data Sources**
   - `discord_server` - Read information about an existing server
+  - `discord_channel` - Read information about an existing channel
+  - `discord_role` - Read information about an existing role
 
 ## Requirements
 

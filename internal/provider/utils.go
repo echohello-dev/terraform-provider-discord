@@ -3,6 +3,7 @@ package provider
 import (
 	"fmt"
 	"strconv"
+	"time"
 )
 
 func parsePermissions(s string) (int64, error) {
@@ -30,4 +31,8 @@ func boolPtr(b bool) *bool {
 
 func stringPtr(s string) *string {
 	return &s
+}
+
+func nowRFC3339() string {
+	return time.Now().UTC().Format(time.RFC3339)
 }

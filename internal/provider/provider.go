@@ -135,6 +135,8 @@ func (p *discordProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *discordProvider) DataSources(_ context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewServerDataSource,
+		NewChannelDataSource,
+		NewRoleDataSource,
 	}
 }
 
@@ -147,5 +149,8 @@ func (p *discordProvider) Resources(_ context.Context) []func() resource.Resourc
 		NewEmojiResource,
 		NewWebhookResource,
 		NewInviteResource,
+		NewChannelPermissionOverwriteResource,
+		NewMemberRoleResource,
+		NewMessageResource,
 	}
 }

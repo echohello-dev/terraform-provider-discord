@@ -8,15 +8,15 @@ import (
 
 func TestChannelResourceModel_Defaults(t *testing.T) {
 	m := channelResourceModel{
-		ID:       types.StringValue("chan-1"),
-		ServerID: types.StringValue("guild-1"),
-		Name:     types.StringValue("general"),
-		Type:     types.Int64Value(0),
-		NSFW:     types.BoolNull(),
-		Topic:    types.StringNull(),
-		Position: types.Int64Null(),
-		ParentID: types.StringNull(),
-		Bitrate:  types.Int64Null(),
+		ID:        types.StringValue("chan-1"),
+		ServerID:  types.StringValue("guild-1"),
+		Name:      types.StringValue("general"),
+		Type:      types.Int64Value(0),
+		NSFW:      types.BoolNull(),
+		Topic:     types.StringNull(),
+		Position:  types.Int64Null(),
+		ParentID:  types.StringNull(),
+		Bitrate:   types.Int64Null(),
 		UserLimit: types.Int64Null(),
 		RateLimit: types.Int64Null(),
 	}
