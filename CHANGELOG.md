@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/echohello-dev/terraform-provider-discord/compare/v1.0.1...v1.0.2) (2026-07-24)
+
+
+### Miscellaneous
+
+* add license ([95b399c](https://github.com/echohello-dev/terraform-provider-discord/commit/95b399c3789985675161e6f84587817a80595f9a))
+
 ## [1.0.1](https://github.com/echohello-dev/terraform-provider-discord/compare/v1.0.0...v1.0.1) (2026-06-21)
 
 
